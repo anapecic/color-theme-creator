@@ -2,13 +2,19 @@ import { useState } from "react";
 import "./Color.css";
 import ColorForm from "../ColorForm/ColorForm";
 
-export default function Color({ color, onDeleteColor }) {
+export default function Color({ color, onDeleteColor, onSubmitEdit }) {
   const [clickDelete, setClickDelete] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [submitEdit, setSubmitEdit] = useState(false);
   const [editContrast, setEditContrast] = useState("#ffffff");
   const [editRole, setEditRole] = useState("add new role");
   const [editHex, setEditHex] = useState("#000000");
+
+  const updatedColorObject = {
+    role: editRole,
+    hex: editHex,
+    contrastText: editContrast,
+    id: color.id,
+  };
 
   function handleToggleEdit() {
     setEdit(!edit);
@@ -30,23 +36,21 @@ export default function Color({ color, onDeleteColor }) {
     setEditHex(editedHex);
   }
 
-  function handleSubmitEdit() {
-    setSubmitEdit(!submitEdit);
+  function callback() {
+    onSubmitEdit(updatedColorObject);
   }
 
   return (
     <div
       className="color-card"
       style={{
-        background: submitEdit ? editHex : color.hex,
-        color: submitEdit ? editContrast : color.contrastText,
+        background: color.hex,
+        color: color.contrastText,
       }}
     >
-      <h3 className="color-card-headline">
-        {submitEdit ? editHex : color.hex}
-      </h3>
-      <h4>{submitEdit ? editRole : color.role}</h4>
-      <p>contrast: {submitEdit ? editContrast : color.contrastText}</p>
+      <h3 className="color-card-headline">{color.hex}</h3>
+      <h4>{color.role}</h4>
+      <p>contrast: {color.contrastText}</p>
 
       {!clickDelete && !edit ? (
         <>
@@ -64,8 +68,8 @@ export default function Color({ color, onDeleteColor }) {
             onContrastInput={handleEditContrast}
             onHexInput={handleEditHex}
             onRoleInput={handleEditRole}
-            callback={handleSubmitEdit}
-            buttonChild={!submitEdit ? "UPDATE COLOR" : "GO BACK"}
+            callback={callback}
+            buttonChild={"UPDATE COLOR"}
           />
           <button onClick={handleToggleEdit}>CANCEL</button>
         </>

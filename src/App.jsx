@@ -41,6 +41,16 @@ function App() {
     );
   }
 
+  function handleSubmitEdit(newColor) {
+    console.log(newColor);
+    setColors(
+      colors.map((color) => {
+        return color.id === newColor.id ? newColor : color;
+      })
+    );
+    console.log(colors);
+  }
+
   return (
     <>
       <h1>✨Theme Creator✨</h1>
@@ -63,6 +73,7 @@ function App() {
             key={color.id}
             color={color}
             onDeleteColor={handleDeleteColor}
+            onSubmitEdit={handleSubmitEdit}
           />
         );
       })}
