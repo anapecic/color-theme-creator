@@ -10,11 +10,6 @@ function App() {
   const [valueHex, setValueHex] = useState("#ffffff");
   const [valueContrast, setValueContrast] = useState("#000000");
   const [colors, setColors] = useState(initialColors);
-  const [edit, setEdit] = useState(false);
-
-  function handleToggleEdit() {
-    setEdit(!edit);
-  }
 
   function handleAddColor() {
     setColors([
@@ -46,21 +41,18 @@ function App() {
     );
   }
 
-  function handleUpdateCard() {
-    console.log("updated");
-  }
-
   return (
     <>
       <h1>✨Theme Creator✨</h1>
       <ColorForm
-        onAddColor={handleAddColor}
+        callback={handleAddColor}
         role={role}
         valueHex={valueHex}
         valueContrast={valueContrast}
         onContrastInput={handleContrastInput}
         onHexInput={handleHexInput}
         onRoleInput={handleRoleInput}
+        buttonChild={"ADD COLOR"}
       />
 
       {colors.length ? null : <p>🌈No colors, start by adding some!🌈</p>}
@@ -71,9 +63,6 @@ function App() {
             key={color.id}
             color={color}
             onDeleteColor={handleDeleteColor}
-            onToggleEdit={handleToggleEdit}
-            edit={edit}
-            onUpdateCard={handleUpdateCard}
           />
         );
       })}
