@@ -41,17 +41,28 @@ function App() {
     );
   }
 
+  function handleSubmitEdit(newColor) {
+    console.log(newColor);
+    setColors(
+      colors.map((color) => {
+        return color.id === newColor.id ? newColor : color;
+      })
+    );
+    console.log(colors);
+  }
+
   return (
     <>
       <h1>✨Theme Creator✨</h1>
       <ColorForm
-        onAddColor={handleAddColor}
+        callback={handleAddColor}
         role={role}
         valueHex={valueHex}
         valueContrast={valueContrast}
         onContrastInput={handleContrastInput}
         onHexInput={handleHexInput}
         onRoleInput={handleRoleInput}
+        buttonChild={"ADD COLOR"}
       />
 
       {colors.length ? null : <p>🌈No colors, start by adding some!🌈</p>}
@@ -62,6 +73,7 @@ function App() {
             key={color.id}
             color={color}
             onDeleteColor={handleDeleteColor}
+            onSubmitEdit={handleSubmitEdit}
           />
         );
       })}
