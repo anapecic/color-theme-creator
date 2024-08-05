@@ -10,6 +10,11 @@ function App() {
   const [valueHex, setValueHex] = useState("#ffffff");
   const [valueContrast, setValueContrast] = useState("#000000");
   const [colors, setColors] = useState(initialColors);
+  const [edit, setEdit] = useState(false);
+
+  function handleToggleEdit() {
+    setEdit(!edit);
+  }
 
   function handleAddColor() {
     setColors([
@@ -41,6 +46,10 @@ function App() {
     );
   }
 
+  function handleUpdateCard() {
+    console.log("updated");
+  }
+
   return (
     <>
       <h1>✨Theme Creator✨</h1>
@@ -62,6 +71,9 @@ function App() {
             key={color.id}
             color={color}
             onDeleteColor={handleDeleteColor}
+            onToggleEdit={handleToggleEdit}
+            edit={edit}
+            onUpdateCard={handleUpdateCard}
           />
         );
       })}
