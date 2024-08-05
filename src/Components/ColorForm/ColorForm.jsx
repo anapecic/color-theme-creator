@@ -10,14 +10,10 @@ export default function ColorForm({
   onRoleInput,
   buttonChild,
 }) {
-  // question: can i call both functions here in the on submit or do i need a callback function?
-  // why do the inputs of the edit mode not work? they are not taking the values in
-
   function handleSubmit(event) {
     event.preventDefault();
     callback(role, valueContrast, valueHex);
     event.target.elements.role.focus();
-    console.log(event);
   }
 
   return (
