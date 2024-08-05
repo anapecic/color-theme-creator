@@ -3,10 +3,11 @@ import Color from "./Components/Color/Color";
 import "./App.css";
 import { useState } from "react";
 import { uid } from "uid";
+import ColorForm from "./Components/ColorForm/ColorForm";
 
 function App() {
   const [role, setRole] = useState("add role");
-  const [valueHex, setValueHex] = useState("#9FA8DA");
+  const [valueHex, setValueHex] = useState("#ffffff");
   const [valueContrast, setValueContrast] = useState("#000000");
   const [colors, setColors] = useState(initialColors);
 
@@ -32,9 +33,17 @@ function App() {
     setRole(textValue);
   }
 
+  function handleDeleteColor(id) {
+    setColors(
+      colors.filter((color) => {
+        return color.id !== id;
+      })
+    );
+  }
+
   return (
     <>
-      <h1>Theme Creator</h1>
+      <h1>✨Theme Creator✨</h1>
       <ColorForm
         onAddColor={handleAddColor}
         role={role}
@@ -45,82 +54,17 @@ function App() {
         onRoleInput={handleRoleInput}
       />
 
+      {colors.length ? null : <p>🌈No colors, start by adding some!🌈</p>}
+
       {colors.map((color) => {
-        return <Color key={color.id} color={color} />;
+        return (
+          <Color
+            key={color.id}
+            color={color}
+            onDeleteColor={handleDeleteColor}
+          />
+        );
       })}
-    </>
-  );
-}
-
-function ColorForm({
-  onAddColor,
-  role,
-  valueHex,
-  valueContrast,
-  onContrastInput,
-  onHexInput,
-  onRoleInput,
-}) {
-  return (
-    <form
-      className="formWrapper"
-      onSubmit={(event) => {
-        event.preventDefault();
-        onAddColor(role, valueContrast, valueHex);
-        event.target.elements.role.focus();
-      }}
-    >
-      <label htmlFor="roleInput">Role</label>
-      <input
-        type="text"
-        id="roleInput"
-        name="role"
-        value={role}
-        onChange={(event) => {
-          onRoleInput(event.target.value);
-        }}
-        required
-      ></input>
-
-      <ColorInput
-        forLabel="hexInput"
-        value={valueHex}
-        onColorInput={onHexInput}
-      >
-        Hex
-      </ColorInput>
-      <ColorInput
-        forLabel="contrastText"
-        value={valueContrast}
-        onColorInput={onContrastInput}
-      >
-        Contrast Text
-      </ColorInput>
-
-      <button type="submit">ADD COLOR</button>
-    </form>
-  );
-}
-
-function ColorInput({ forLabel, children, value, onColorInput }) {
-  return (
-    <>
-      <label htmlFor={forLabel}>{children}</label>
-      <div>
-        <input
-          type="text"
-          id={forLabel}
-          value={value}
-          onChange={(event) => onColorInput(event.target.value)}
-        ></input>
-        <input
-          type="color"
-          value={value}
-          onChange={(event) => {
-            onColorInput(event.target.value);
-          }}
-        ></input>
-      </div>
     </>
   );
 }
