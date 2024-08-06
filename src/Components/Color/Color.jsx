@@ -2,13 +2,14 @@ import { useState } from "react";
 import "./Color.css";
 import ColorForm from "../ColorForm/ColorForm";
 import CopyToClipboard from "../CopyToClipboard/CopyToClipboard";
+import ContrastChecker from "../ContrastChecker/ContrastChecker";
 
 export default function Color({ color, onDeleteColor, onSubmitEdit }) {
   const [clickDelete, setClickDelete] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [editContrast, setEditContrast] = useState("#ffffff");
-  const [editRole, setEditRole] = useState("add new role");
-  const [editHex, setEditHex] = useState("#000000");
+  const [editContrast, setEditContrast] = useState(color.contrastText);
+  const [editRole, setEditRole] = useState(color.role);
+  const [editHex, setEditHex] = useState(color.hex);
 
   const updatedColorObject = {
     role: editRole,
@@ -54,6 +55,11 @@ export default function Color({ color, onDeleteColor, onSubmitEdit }) {
       <CopyToClipboard copyValue={color.hex} />
       <h4>{color.role}</h4>
       <p>contrast: {color.contrastText}</p>
+      <ContrastChecker
+        checkHex={color.hex}
+        checkContrast={color.contrastText}
+      />
+      <br />
 
       {!clickDelete && !edit ? (
         <>
