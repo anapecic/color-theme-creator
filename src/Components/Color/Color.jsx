@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./Color.css";
 import ColorForm from "../ColorForm/ColorForm";
 import CopyToClipboard from "../CopyToClipboard/CopyToClipboard";
+import ContrastChecker from "../ContrastChecker/ContrastChecker";
 
 export default function Color({ color, onDeleteColor, onSubmitEdit }) {
   const [clickDelete, setClickDelete] = useState(false);
@@ -54,6 +55,11 @@ export default function Color({ color, onDeleteColor, onSubmitEdit }) {
       <CopyToClipboard copyValue={color.hex} />
       <h4>{color.role}</h4>
       <p>contrast: {color.contrastText}</p>
+      <ContrastChecker
+        checkHex={color.hex}
+        checkContrast={color.contrastText}
+      />
+      <br />
 
       {!clickDelete && !edit ? (
         <>
