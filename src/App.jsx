@@ -1,10 +1,22 @@
 import { initialColors } from "./lib/colors";
 import Color from "./Components/Color/Color";
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { uid } from "uid";
 import useLocalStorageState from "use-local-storage-state";
 import ColorForm from "./Components/ColorForm/ColorForm";
+import ThemeForm from "./Components/ThemeForm/ThemeForm";
+
+const initialThemes = [
+  {
+    id: "default",
+    name: "Default Theme",
+    colors: ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9"],
+  },
+  { id: "My Theme 1", name: "My Theme 1", colors: [] },
+];
+
+console.log(initialThemes);
 
 function App() {
   const [role, setRole] = useState("add role");
@@ -13,6 +25,21 @@ function App() {
   const [colors, setColors] = useLocalStorageState("currentTheme", {
     defaultValue: initialColors,
   });
+  const [currentTheme, setCurrentTheme] = useState([]);
+  const [themes, setThemes] = useState(initialThemes);
+
+  useEffect(() => {
+    const defaultTheme = themes.find((theme) => theme.id === "default");
+
+    if (defaultTheme) {
+      const filteredColors = initialColors.filter((color) =>
+        defaultTheme.colors.includes(color.id)
+      );
+
+      setCurrentTheme(filteredColors);
+      setColors(filteredColors);
+    }
+  }, [themes]);
 
   function handleAddColor() {
     setColors([
@@ -52,9 +79,34 @@ function App() {
     );
   }
 
+  function handleAddTheme(option) {
+    console.log("added this theme:", option);
+  }
+
+  function handleChangeCurrentTheme(option) {
+    const theme = themes.find((theme) => {
+      return theme.id === option;
+    });
+    if (theme) {
+      const filteredColors = colors.filter((color) =>
+        theme.colors.includes(color.id)
+      );
+      setCurrentTheme(filteredColors);
+    } else {
+      console.error(`Theme with id ${option} not found`);
+    }
+  }
+
+  console.log(currentTheme);
+  console.log(colors);
+
   return (
     <>
       <h1>✨Theme Creator✨</h1>
+      <ThemeForm
+        onAddTheme={handleAddTheme}
+        onChangeCurrentTheme={handleChangeCurrentTheme}
+      />
       <ColorForm
         callback={handleAddColor}
         role={role}
@@ -66,9 +118,11 @@ function App() {
         buttonChild={"ADD COLOR"}
       />
 
-      {colors.length ? null : <p>🌈No colors, start by adding some!🌈</p>}
+      {currentTheme.length === 0 ? (
+        <p>🌈No colors, start by adding some!🌈</p>
+      ) : null}
 
-      {colors.map((color) => {
+      {currentTheme.map((color) => {
         return (
           <Color
             key={color.id}
