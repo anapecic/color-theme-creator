@@ -3,13 +3,16 @@ import Color from "./Components/Color/Color";
 import "./App.css";
 import { useState } from "react";
 import { uid } from "uid";
+import useLocalStorageState from "use-local-storage-state";
 import ColorForm from "./Components/ColorForm/ColorForm";
 
 function App() {
   const [role, setRole] = useState("add role");
   const [valueHex, setValueHex] = useState("#ffffff");
   const [valueContrast, setValueContrast] = useState("#000000");
-  const [colors, setColors] = useState(initialColors);
+  const [colors, setColors] = useLocalStorageState("currentTheme", {
+    defaultValue: initialColors,
+  });
 
   function handleAddColor() {
     setColors([

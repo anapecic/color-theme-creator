@@ -38,6 +38,7 @@ export default function Color({ color, onDeleteColor, onSubmitEdit }) {
 
   function callback() {
     onSubmitEdit(updatedColorObject);
+    handleToggleEdit();
   }
 
   return (
@@ -79,7 +80,13 @@ export default function Color({ color, onDeleteColor, onSubmitEdit }) {
         <>
           <p className="color-card-highlight">Really delete?</p>
           <button onClick={handleToggleDelete}>CANCEL</button>
-          <button onClick={() => onDeleteColor(color.id)}>DELETE</button>
+          <button
+            onClick={() => {
+              onDeleteColor(color.id);
+            }}
+          >
+            DELETE
+          </button>
         </>
       )}
     </div>
