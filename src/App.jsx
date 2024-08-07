@@ -16,28 +16,14 @@ const initialThemes = [
   { id: "My Theme 2", name: "My Theme 2", colors: [] },
 ];
 
-// const defaultThemeColors = [
-//   "c1",
-//   "c2",
-//   "c3",
-//   "c4",
-//   "c5",
-//   "c6",
-//   "c7",
-//   "c8",
-//   "c9",
-// ];
-
 function App() {
   const [role, setRole] = useState("add role");
   const [valueHex, setValueHex] = useState("#ffffff");
   const [valueContrast, setValueContrast] = useState("#000000");
   const [colors, setColors] = useLocalStorageState("allColors", {
-    //all colors!
     defaultValue: initialColors,
   });
   const [currentTheme, setCurrentTheme] = useLocalStorageState("currentTheme", {
-    //id des aktuellen themes
     defaultValue: {
       id: "Default Theme",
       name: "Default Theme",
@@ -91,7 +77,6 @@ function App() {
   }
 
   function handleDeleteColor(id) {
-    //done!
     const updatedTheme = currentTheme.colors.filter((color) => color !== id);
 
     setCurrentColors(
@@ -114,7 +99,6 @@ function App() {
   }
 
   function handleSubmitEdit(newColor) {
-    //done!
     setCurrentColors(
       currentColors.map((color) => {
         return color.id === newColor.id ? newColor : color;
@@ -142,10 +126,24 @@ function App() {
     setCurrentColors(currentColorsFromTheme);
   }
 
+  function handleDeleteTheme() {
+    const updatedThemes = themes.filter((theme) => {
+      return theme.id !== currentTheme.id;
+    });
+    console.log(updatedThemes);
+    setThemes(updatedThemes);
+    handleChangeTheme(themes[0]); //hier muss wechsel auf nicht-gelöschte karte
+    //hier muss auch die ColorInput Karte gelöscht werden und die erste Karte ausgespielt werden
+  }
+
   return (
     <>
       <h1>✨Theme Creator✨</h1>
-      <ThemeForm handleChangeTheme={handleChangeTheme} themes={themes} />
+      <ThemeForm
+        handleChangeTheme={handleChangeTheme}
+        themes={themes}
+        handleDeleteTheme={handleDeleteTheme}
+      />
       <ColorForm
         callback={handleAddColor}
         role={role}
@@ -177,12 +175,17 @@ function App() {
 
 export default App;
 
-function ThemeForm({ handleChangeTheme, themes }) {
+function ThemeForm({ handleChangeTheme, themes, handleDeleteTheme }) {
   const allThemes = themes;
 
   function onChangeTheme(themeId) {
     const newTheme = allThemes.find((theme) => theme.id === themeId);
     handleChangeTheme(newTheme);
+  }
+
+  function onDeleteTheme(event) {
+    event.preventDefault();
+    handleDeleteTheme();
   }
 
   return (
@@ -200,7 +203,7 @@ function ThemeForm({ handleChangeTheme, themes }) {
       </select>
       <button type="submit">ADD</button>
       <button>EDIT</button>
-      <button>DELETE</button>
+      <button onClick={(event) => onDeleteTheme(event)}>DELETE</button>
     </form>
   );
 }
