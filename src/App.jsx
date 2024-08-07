@@ -36,9 +36,14 @@ function App() {
     //all colors!
     defaultValue: initialColors,
   });
-  // const [currentTheme, setCurrentTheme] = useLocalStorageState("currentTheme", {
-  //   defaultValue: [],
-  // });
+  const [currentTheme, setCurrentTheme] = useLocalStorageState("currentTheme", {
+    //id des aktuellen themes
+    defaultValue: {
+      id: "Default Theme",
+      name: "Default Theme",
+      colors: ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9"],
+    },
+  });
   const [currentColors, setCurrentColors] = useLocalStorageState(
     "currentColors",
     { defaultValue: [...initialColors] }
@@ -69,27 +74,16 @@ function App() {
       hex: valueHex,
       contrastText: valueContrast,
     };
-    setCurrentColors([{ ...newColor }, ...colors]);
+    setCurrentColors([{ ...newColor }, ...currentColors]);
     setColors([{ ...newColor }, ...colors]);
 
     setRole("");
     setValueHex("#ffffff");
     setValueContrast("#000000");
 
-    //to do: themes muss gesynched werden. newColor.id mit themes abgleichen
-    //idee: ich versuche aus currentColors ein Verzeichnis zu erstellen und so das current theme finden
-    const currentTheme = currentColors.map((color) => {
-      return color.id;
-    });
-    const findThemeObject = (verzeichnis) =>
-      themes.find((theme) =>
-        theme.colors.toString().includes(verzeichnis.toString())
-      );
-    const themeToAdd = findThemeObject(currentTheme); //returnt das objekt des aktuellen themes
-
     setThemes(
       themes.map((theme) => {
-        return theme.id === themeToAdd.id
+        return theme.id === currentTheme.id
           ? { ...theme, colors: [uId, ...theme.colors] }
           : theme;
       })
@@ -98,42 +92,31 @@ function App() {
 
   function handleDeleteColor(id) {
     //done!
-    setCurrentColors(
-      colors.filter((color) => {
-        return color.id !== id;
-      })
-    );
-    setColors(
-      colors.filter((color) => {
-        return color.id !== id;
-      })
-    );
-    //theme finden
-    const currentTheme = currentColors.map((color) => {
-      return color.id;
-    });
-    const findThemeObject = (verzeichnis) =>
-      themes.find((theme) =>
-        theme.colors.toString().includes(verzeichnis.toString())
-      );
-    const themeToDelete = findThemeObject(currentTheme); //returnt objekt des aktuellen themes
+    const updatedTheme = currentTheme.colors.filter((color) => color !== id);
 
-    const updatedTheme = themeToDelete.colors.filter((color) => color !== id);
-    console.log(updatedTheme);
+    setCurrentColors(
+      currentColors.filter((color) => {
+        return color.id !== id;
+      })
+    );
+
+    const updatedCurrentTheme = { ...currentTheme, colors: updatedTheme };
 
     setThemes(
       themes.map((theme) => {
-        return theme === themeToDelete
-          ? { ...theme, colors: [...updatedTheme] }
+        return theme.id === currentTheme.id
+          ? { ...updatedCurrentTheme }
           : theme;
       })
     );
+
+    setCurrentTheme(updatedCurrentTheme);
   }
 
   function handleSubmitEdit(newColor) {
     //done!
     setCurrentColors(
-      colors.map((color) => {
+      currentColors.map((color) => {
         return color.id === newColor.id ? newColor : color;
       })
     );
@@ -144,15 +127,18 @@ function App() {
     );
   }
 
-  function handleChangeTheme(currentThemeOption) {
-    const findColorObject = (id) =>
+  function handleChangeTheme(currentThemeObject) {
+    const findColorObject = (
+      id //sucht farbe anhand von id der farbe
+    ) =>
       colors.find((color) => {
         return color.id === id;
       });
-    const currentColorsFromTheme = currentThemeOption.map((colorId) => {
+    const currentColorsFromTheme = currentThemeObject.colors.map((colorId) => {
       return findColorObject(colorId);
     });
 
+    setCurrentTheme(currentThemeObject);
     setCurrentColors(currentColorsFromTheme);
   }
 
@@ -196,16 +182,16 @@ function ThemeForm({ handleChangeTheme, themes }) {
 
   function onChangeTheme(themeId) {
     const newTheme = allThemes.find((theme) => theme.id === themeId);
-    const newColorIds = newTheme.colors; //ID Verzeichnis! Array ->in App als currentTheme
-
-    handleChangeTheme(newColorIds);
+    handleChangeTheme(newTheme);
   }
 
   return (
     <form>
       <select
         name="select"
-        onChange={(event) => onChangeTheme(event.target.value)}
+        onChange={(event) => {
+          return onChangeTheme(event.target.value);
+        }}
       >
         {/* hier muss über die themes gemappt werden */}
         <ThemeOption themeName="Default Theme" />
