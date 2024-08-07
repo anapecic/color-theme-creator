@@ -11,9 +11,7 @@ export default function ContrastChecker({ checkHex, checkContrast }) {
           {
             method: "POST",
             body: JSON.stringify({ colors: [checkHex, checkContrast] }),
-            headers: {
-              "Content-Type": "application/json",
-            },
+            mode: "cors",
           }
         );
         const fetchedScore = await response.json();
