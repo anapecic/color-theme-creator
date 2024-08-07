@@ -1,6 +1,6 @@
 import ThemeOption from "../ThemeOption/ThemeOption";
 
-export default function ThemeForm({ onAddTheme, onChangeCurrentTheme }) {
+export default function ThemeForm({ onAddTheme, onChangeCurrentThemes }) {
   return (
     <form
       onSubmit={(event) => {
@@ -10,7 +10,7 @@ export default function ThemeForm({ onAddTheme, onChangeCurrentTheme }) {
     >
       <select
         name="select"
-        onChange={(event) => onChangeCurrentTheme(event.target.value)}
+        onChange={(event) => onChangeCurrentThemes(event.target.value)}
       >
         <option value="default">Default Theme</option>
         <ThemeOption themeName="My Theme 1" />
