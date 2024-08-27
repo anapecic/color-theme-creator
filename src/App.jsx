@@ -16,8 +16,8 @@ function App() {
   });
   const [currentTheme, setCurrentTheme] = useLocalStorageState("currentTheme", {
     defaultValue: {
-      id: "Default Theme",
-      name: "Default Theme",
+      id: "default theme",
+      name: "default theme",
       colors: ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9"],
     },
   });
@@ -167,7 +167,7 @@ function App() {
         onContrastInput={handleContrastInput}
         onHexInput={handleHexInput}
         onRoleInput={handleRoleInput}
-        buttonChild={"ADD COLOR"}
+        buttonChild={"add color"}
       />
 
       {currentColors.length ? null : (

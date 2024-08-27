@@ -51,8 +51,10 @@ export default function Color({ color, onDeleteColor, onSubmitEdit }) {
         color: color.contrastText,
       }}
     >
-      <h3 className="color-card-headline">{color.hex}</h3>
-      <CopyToClipboard copyValue={color.hex} />
+      <div className="flex-wrapper-copy">
+        <h3 className="color-card-headline">{color.hex}</h3>
+        <CopyToClipboard copyValue={color.hex} />
+      </div>
       <h4>{color.role}</h4>
       <p>contrast: {color.contrastText}</p>
       <ContrastChecker
@@ -63,8 +65,8 @@ export default function Color({ color, onDeleteColor, onSubmitEdit }) {
 
       {!clickDelete && !edit ? (
         <>
-          <button onClick={handleToggleDelete}>DELETE</button>
-          <button onClick={handleToggleEdit}>EDIT</button>
+          <button onClick={handleToggleDelete}>delete</button>
+          <button onClick={handleToggleEdit}>edit</button>
         </>
       ) : null}
 
@@ -78,22 +80,22 @@ export default function Color({ color, onDeleteColor, onSubmitEdit }) {
             onHexInput={handleEditHex}
             onRoleInput={handleEditRole}
             callback={callback}
-            buttonChild={"UPDATE COLOR"}
+            buttonChild={"update color"}
           />
-          <button onClick={handleToggleEdit}>CANCEL</button>
+          <button onClick={handleToggleEdit}>cancel</button>
         </>
       )}
 
       {!clickDelete ? null : (
         <>
           <p className="color-card-highlight">Really delete?</p>
-          <button onClick={handleToggleDelete}>CANCEL</button>
+          <button onClick={handleToggleDelete}>cancel</button>
           <button
             onClick={() => {
               onDeleteColor(color.id);
             }}
           >
-            DELETE
+            delete
           </button>
         </>
       )}

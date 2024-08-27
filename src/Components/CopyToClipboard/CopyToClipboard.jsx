@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
 
 export default function CopyToClipboard({ copyValue }) {
   const [active, setActive] = useState(false);
@@ -20,8 +22,8 @@ export default function CopyToClipboard({ copyValue }) {
   }
 
   return (
-    <button onClick={() => handleCopying(copyValue)}>
-      {active ? "SUCCESFULLY COPIED!" : "COPY"}
+    <button onClick={() => handleCopying(copyValue)} className="copy">
+      {active ? "SUCCESFULLY COPIED!" : <FontAwesomeIcon icon={faCopy} />}
     </button>
   );
 }

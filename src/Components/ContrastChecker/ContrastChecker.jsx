@@ -38,6 +38,7 @@ export default function ContrastChecker({ checkHex, checkContrast }) {
         display: "inline-block",
         color: "black",
         fontWeight: "bold",
+        marginBottom: "2px",
       };
     } else if (score === "Yup") {
       return {
@@ -45,6 +46,7 @@ export default function ContrastChecker({ checkHex, checkContrast }) {
         display: "inline-block",
         color: "white",
         fontWeight: "bold",
+        marginBottom: "2px",
       };
     } else if (score === "Kinda") {
       return {
@@ -52,6 +54,7 @@ export default function ContrastChecker({ checkHex, checkContrast }) {
         display: "inline-block",
         color: "black",
         fontWeight: "bold",
+        marginBottom: "2px",
       };
     } else {
       return { display: "none" };
@@ -60,7 +63,12 @@ export default function ContrastChecker({ checkHex, checkContrast }) {
 
   return (
     <p style={getContrastStyle()}>
-      Overall Contrast Score: {score ? score : null}
+      contrast score:{" "}
+      {score
+        ? (score === "Yup" && "good") ||
+          (score === "Nope" && "bad") ||
+          (score === "Kinda" && "okay")
+        : null}
     </p>
   );
 }

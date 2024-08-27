@@ -7,7 +7,7 @@ export default function ColorInput({
   return (
     <>
       <label htmlFor={forLabel}>{children}</label>
-      <div>
+      <div className="flex-wrapper-color">
         <input
           type="text"
           id={forLabel}
@@ -20,6 +20,7 @@ export default function ColorInput({
           onChange={(event) => {
             onColorInput(event.target.value);
           }}
+          className="colorinput"
         ></input>
       </div>
     </>

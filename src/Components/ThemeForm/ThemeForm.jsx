@@ -75,28 +75,28 @@ export default function ThemeForm({
             onEditName(event);
           }}
         >
-          EDIT
+          edit
         </button>
       ) : null}
       {formMode === "add" ? (
-        <button onClick={(event) => onAddNewTheme(event)}>ADD</button>
+        <button onClick={(event) => onAddNewTheme(event)}>add</button>
       ) : null}
       {formMode !== "default" ? null : (
         <>
-          <button onClick={() => setFormMode("add")}>ADD</button>
+          <button onClick={() => setFormMode("add")}>add</button>
           <button
             disabled={currentTheme.name === "Default Theme" ? true : false}
             onClick={() => {
               setFormMode("edit");
             }}
           >
-            EDIT
+            edit
           </button>
           <button
             onClick={(event) => onDeleteTheme(event)}
             disabled={currentTheme.name === "Default Theme" ? true : false}
           >
-            DELETE
+            delete
           </button>
         </>
       )}
